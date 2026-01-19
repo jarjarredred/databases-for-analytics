@@ -1,6 +1,6 @@
 # Exercise 01: World Database SQL Practice
 
-- Name:
+- Name:Jarred Gastreich
 - Course: Database for Analytics
 - Module: 1
 - Database Used: World Database
@@ -27,7 +27,9 @@
 Why were these data types selected?
 
 ### Answer
-_Write your explanation here._
+Population is a INT data type containing discrete data that stores whole numbers only. Life Expectancy is a DECIMAL data type that stores continous data with a fixed decimal point.
+
+INT was selected for population because you can't have a partial person. Decimal was selected for LifeExpectancy because it's an average over time.
 
 ### Screenshot
 _Show the table structure or DESCRIBE output._
@@ -46,7 +48,7 @@ DESCRIBE country;
 Why do you think this data type was selected?
 
 ### Answer
-_Write your explanation here._
+Smallint was chosen because it is more efficient at storage as it uses 2 bytes instead of 4 bytes that INT uses. Human history has not gone back further than 32000 years to cause conflict with this data type.
 
 ### Screenshot
 
@@ -64,7 +66,7 @@ DESCRIBE country;
 Explain why your proposed data type might be better in some situations.
 
 ### Answer
-_Write your explanation here._
+You could also use the YEAR data type because it is even small, 1 byte vs 2 bytes.It also has built-in validation to restrict input.
 
 ---
 
