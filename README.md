@@ -1,3 +1,5 @@
+# Databases Module 1 by Jarred Gastreich
+
 # databases-for-analytics
 
 > Professional Databases for Analytics Project.
