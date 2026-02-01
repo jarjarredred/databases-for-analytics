@@ -1,6 +1,6 @@
 # Exercise 03: MongoDB – Document Queries and Analysis
 
-- Name:
+- Name: Jarred Gastreich
 - Course: Database for Analytics
 - Module: 3
 - Database Used: MongoDB
@@ -23,14 +23,13 @@
 
 When importing the documents from `restaurants-json.json`, **how many documents were imported into your collection**?
 
-### Answer
-_Write the number of documents imported._
+### 25358
 
 ### Screenshot
 _Show evidence of how you determined this (for example, a count query)._
 
 ```javascript
-// Your MongoDB command here
+countDocuments()
 ```
 
 ![Q1 Screenshot](screenshots/q1_document_count.png)
@@ -41,10 +40,10 @@ _Show evidence of how you determined this (for example, a count query)._
 
 Before writing queries on the data, **what command do you use to set the MongoDB shell to operate on the `44661` database**?
 
-### MongoDB Command
+### use
 
 ```javascript
-// Your MongoDB command here
+use 44661
 ```
 
 ### Screenshot
@@ -57,10 +56,10 @@ Before writing queries on the data, **what command do you use to set the MongoDB
 
 Using your `restaurants` collection in the `44661` database, write the MongoDB query needed to **locate all documents in the `"Queens"` borough**.
 
-### MongoDB Query
+### db.restaurants.find({ "borough": "Queens" })
 
 ```javascript
-// Your MongoDB query here
+db.restaurants.find({ "borough": "Queens" })
 ```
 
 ### Screenshot
@@ -73,10 +72,13 @@ Using your `restaurants` collection in the `44661` database, write the MongoDB q
 
 Using your `restaurants` collection in the `44661` database, write the MongoDB query needed to **find the number of restaurants in the `"Queens"` borough**.
 
-### MongoDB Query
+### 5656
 
 ```javascript
-// Your MongoDB query here
+db.restaurants.aggregate([
+  { $match: { "borough": "Queens" } },
+  { $count: "total_queens_restaurants" }
+])
 ```
 
 ### Screenshot
@@ -89,10 +91,13 @@ Using your `restaurants` collection in the `44661` database, write the MongoDB q
 
 Using your `restaurants` collection in the `44661` database, write the MongoDB query needed to **find the number of restaurants in the `"Queens"` borough whose cuisine is `"Hamburgers"`**.
 
-### MongoDB Query
+### 104
 
 ```javascript
-// Your MongoDB query here
+db.restaurants.countDocuments({
+    "borough": "Queens",
+    "cuisine": "Hamburgers"
+})
 ```
 
 ### Screenshot
@@ -107,10 +112,10 @@ Using your `restaurants` collection in the `44661` database, write the MongoDB q
 
 *Hint: Look up how to query **embedded documents**.*
 
-### MongoDB Query
+### 68
 
 ```javascript
-// Your MongoDB query here
+db.restaurants.countDocuments({ "address.zipcode": "10460" })
 ```
 
 ### Screenshot
@@ -139,7 +144,10 @@ Your output should resemble:
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+db.restaurants.find(
+  { "address.zipcode": "10460" },
+  { "name": 1, "_id": 0 }
+)
 ```
 
 ### Screenshot
@@ -159,7 +167,10 @@ Your results should include:
 ### MongoDB Query
 
 ```javascript
-// Your MongoDB query here
+db.restaurants.find(
+  { "name": /IHOP/i },
+  { "name": 1, "_id": 0 }
+)
 ```
 
 ### Screenshot
