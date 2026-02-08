@@ -1,8 +1,8 @@
 # Exercise 04: Advanced SQL, Jupyter, and Visualization
 
-- Name:
+- Name: Jarred
 - Course: Database for Analytics
-- Module:
+- Module: 4
 - Database Used: World Database
 - Tools Used: PostgreSQL, SQLAlchemy, Pandas, Jupyter Notebooks
 
@@ -31,7 +31,21 @@ Considering the World database, write a SQL statement that will **display the na
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    c.Name AS Country_Name,
+    COUNT(cl.Language) AS Official_Languages
+FROM
+    Country c
+JOIN
+    CountryLanguage cl ON c.Code = cl.CountryCode
+WHERE
+    cl.IsOfficial = 'T'
+GROUP BY
+    c.Name
+HAVING
+    COUNT(cl.Language) > 2
+ORDER BY
+    Official_Languages DESC;
 ```
 
 ### Screenshot
@@ -49,7 +63,18 @@ After the `create_engine` command is executed, **what are the three statements r
 ### Python Code
 
 ```python
-# Your three Python statements here
+query = """
+SELECT
+    c.name AS "Country",
+    COUNT(*) AS "Number of Languages"
+FROM country AS c
+JOIN countrylanguage AS cl
+    ON cl.countrycode = c.code
+WHERE cl.isofficial = 'T'
+GROUP BY c.name
+HAVING COUNT(*) > 2
+ORDER BY "Number of Languages" DESC;
+"""
 ```
 
 ### Screenshot
@@ -69,7 +94,21 @@ Using **Jupyter Notebooks**, write the Python code needed to produce the followi
 ### Python Code
 
 ```python
-# Your Python code here
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = np.arange(len(df["country"]))
+
+plt.figure(figsize=(12, 6))
+plt.bar(x, df["number_of_languages"])
+
+plt.title("Countries with More Than 2 Official Languages")
+plt.xlabel("Country")
+plt.ylabel("Number of Official Languages")
+plt.xticks(x - 0.25, df["country"], rotation=45, ha="left")
+plt.gca().tick_params(axis="x", length=0, pad=-80)
+plt.tight_layout()
+plt.show()
 ```
 
 ### Screenshot
