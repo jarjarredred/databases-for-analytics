@@ -1,7 +1,7 @@
 # Module 6 - Exercise 1: Creating a Data Warehouse
 From the Operational Model to the Dimensional Model
 
-- Name:
+- Name: Jarred Gastreich
 - Course: Database for Analytics
 - Module: 6
 
@@ -121,4 +121,6 @@ In 1-2 short paragraphs, explain:
 
 #### Design Notes
 
-_Write your design notes here._
+I chose the Date, Customer, and Part dimensions because they directly map to the who, what and when of the business process. This is what the leadership team needs to analyize. The Date dimension is essential for navigating the calendar. The cCustomer dimension allows filtering for geographics like zip code. The Part dimension enables sorting by product categories. They are seperated by the fact table so users of the data warehouse can filter by several combinations of descriptors.
+
+The fact table grain is set to daily sales because of the requirement for determining the "average amount spent per customer per day"
