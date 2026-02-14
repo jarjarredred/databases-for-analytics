@@ -1,8 +1,8 @@
 # Exercise 05: SQLDA Database - Dates, Data Quality, Arrays, and JSON
 
-- Name:
+- Name:Jarred
 - Course: Database for Analytics
-- Module:
+- Module: 5
 - Database Used:  `sqlda` (Sample Datasets)
 - Tools Used: PostgreSQL (pgAdmin or psql)
 
@@ -42,7 +42,10 @@ year
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT DISTINCT
+    EXTRACT(YEAR FROM sent_date) AS year
+FROM emails
+ORDER BY year ASC;  
 ```
 
 ### Screenshot
@@ -65,7 +68,15 @@ count   year
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    COUNT(*) AS count,
+    EXTRACT(YEAR FROM sent_date) AS year
+FROM
+    emails
+GROUP BY
+    year
+ORDER BY
+    year;  
 ```
 
 ### Screenshot
@@ -86,7 +97,15 @@ Only include emails that contain **both** a sent date and an opened date.
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    sent_date,
+    opened_date,
+    (opened_date - sent_date) AS interval
+FROM
+    emails
+WHERE
+    sent_date IS NOT NULL
+    AND opened_date IS NOT NULL;
 ```
 
 ### Screenshot
@@ -102,7 +121,15 @@ Using the `sqlda` database, write the SQL needed to show emails that contain an 
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    email_id,
+    customer_id,
+    sent_date,
+    opened_date
+FROM
+    emails
+WHERE
+    opened_date < sent_date;
 ```
 
 ### Screenshot
@@ -119,8 +146,7 @@ After looking at the data, **why is this the case?**
 
 ### Answer
 
-_Write your explanation here._
-
+This anomolie is due to daylight saving time. The sender's server is set to their local time and the receiving server is either set to their local time or a standardized unverisal time. These time differences result in over 100 emails opened before the sent date.
 ### Screenshot (if requested by instructor)
 
 ![Q5 Screenshot](screenshots/q5_explain_date_issue.png)
@@ -160,7 +186,7 @@ CREATE TEMP TABLE customer_dealership_distance AS (
 
 ### Answer
 
-_Write your explanation here._
+This code is doing a geographical analysis to determine the distance between every customer and every dealership. It uses temporary tables and filters out null data, orders by longitude coordinates, and finally cross joins by matching every row in the customer table with every row in the dealership table.
 
 ---
 
@@ -177,7 +203,15 @@ For example - dealership 1 is below:
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    dealership_id,
+    ARRAY_AGG(last_name || ',' || first_name ORDER BY last_name) AS salespeople_array
+FROM
+    salespeople
+GROUP BY
+    dealership_id
+ORDER BY
+    dealership_id;
 ```
 
 ### Screenshot
@@ -202,7 +236,20 @@ Reference image:
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT
+    d.dealership_id,
+    d.state,
+    ARRAY_AGG(s.last_name || ',' || s.first_name ORDER BY s.last_name) AS salespeople,
+    COUNT(s.salesperson_id) AS salesperson_count
+FROM
+    dealerships d
+JOIN
+    salespeople s ON d.dealership_id = s.dealership_id
+GROUP BY
+    d.dealership_id,
+    d.state
+ORDER BY
+    d.state;
 ```
 
 ### Screenshot
@@ -218,7 +265,8 @@ Using the `sqlda` database, write the SQL needed to convert the **customers** ta
 ### SQL
 
 ```sql
--- Your SQL here
+SELECT json_agg(row_to_json(customers)) AS total_customer_data
+FROM customers;
 ```
 
 ### Screenshot
@@ -244,7 +292,23 @@ Reference image:
 ### SQL
 
 ```sql
--- Your SQL here
+WITH dealership_summary AS (
+    SELECT
+        d.state,
+        ARRAY_AGG(s.last_name || ',' || s.first_name ORDER BY s.last_name) AS salespeople,
+        COUNT(s.salesperson_id) AS salesperson_count
+    FROM
+        dealerships d
+    JOIN
+        salespeople s ON d.dealership_id = s.dealership_id
+    GROUP BY
+        d.dealership_id,
+        d.state
+    ORDER BY
+        d.state
+)
+SELECT json_agg(row_to_json(dealership_summary)) AS final_json
+FROM dealership_summary;
 ```
 
 ### Screenshot
